@@ -11,3 +11,9 @@ findChessboardCorners()
 drawChessboardCorners()
 ```
 to automatically find and draw corners in an image of a chessboard pattern
+
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
