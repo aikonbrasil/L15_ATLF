@@ -40,7 +40,7 @@ if ret == True:
 ```
 
 Other important functions are `cv2.calibrateCamera()` and `cv2.undistort()` functions to compute the calibration and undistortion
-```
+```python
 import pickle
 import cv2
 import numpy as np
