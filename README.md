@@ -153,3 +153,40 @@ ax2.set_title('Undistorted and Warped Image', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 
 ```
+## Advanced Gradient Threshold
+as we need to pass a single color channel to `cv2.sobel()` it is mandatory to apply a grayscale convertion
+
+```
+gray = cv2.cvtColor(im, cv2.COLOR_RGB2GRAY)
+```
+
+cv2 function used to apply  derivative in the x dimension
+```
+sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0)
+```
+
+to apply derivative in the y dimension 
+```
+sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
+```
+
+to apply the absolute of the x derivative
+```
+abs_sobelx = np.absolute(sobelx)
+```
+to convert the absolute value image to 8-bit
+```
+scaled_sobel = np.uint8(255*abs_sobelx/np.max(abs_sobelx))
+```
+
+To create a binary threshold to select pixels based on gradient strength:
+```python
+thresh_min = 20
+thresh_max = 100
+sxbinary = np.zeros_like(scaled_sobel)
+sxbinary[(scaled_sobel >= thresh_min) & (scaled_sobel <= thresh_max)] = 1
+plt.imshow(sxbinary, cmap='gray')
+```
+
+
+
