@@ -105,8 +105,8 @@ ny = 6 # the number of inside corners in y
 
 # MODIFY THIS FUNCTION TO GENERATE OUTPUT 
 # THAT LOOKS LIKE THE IMAGE ABOVE
-def corners_unwarp(img, nx, ny, mtx, dist):
-    img1 = np.copy(img)
+def corners_unwarp(img1, nx, ny, mtx, dist):
+    #img1 = np.copy(img)
     # Pass in your image into this function
     # Write code to do the following steps
     # 1) Undistort using mtx and dist
@@ -125,18 +125,21 @@ def corners_unwarp(img, nx, ny, mtx, dist):
         #One especially smart way to do this would be to use four well-chosen
         # corners that were automatically detected during the undistortion steps
         #We recommend using the automatic detection of corners in your code
-    point_0 = corners[0][0]
-    point_1 = corners[nx-2][0]
-    point_2 = corners[(ny-1)*nx][0]
-    point_3 = corners[nx*ny-2][0]
-    src = np.float32([point_0,point_1,point_2,point_3])
-    # c) define 4 destination points dst = np.float32([[,],[,],[,],[,]])
-    dst = np.float32([[100,100],[1000,100],[100,850],[1000,850]])
-    # d) use cv2.getPerspectiveTransform() to get M, the transform matrix
-    M = cv2.getPerspectiveTransform(src, dst)
-    # e) use cv2.warpPerspective() to warp your image to a top-down view
-    img_size = gray.shape[::-1]
-    warped = cv2.warpPerspective(undist, M, img_size, flags=cv2.INTER_LINEAR)
+        point_0 = corners[0][0]
+        point_1 = corners[nx-2][0]
+        point_2 = corners[(ny-1)*nx][0]
+        point_3 = corners[nx*ny-2][0]
+        src = np.float32([point_0,point_1,point_2,point_3])
+        # c) define 4 destination points dst = np.float32([[,],[,],[,],[,]])
+        dst = np.float32([[100,100],[1000,100],[100,850],[1000,850]])
+        # d) use cv2.getPerspectiveTransform() to get M, the transform matrix
+        M = cv2.getPerspectiveTransform(src, dst)
+        # e) use cv2.warpPerspective() to warp your image to a top-down view
+        img_size = gray.shape[::-1]
+        warped = cv2.warpPerspective(undist, M, img_size, flags=cv2.INTER_LINEAR)
+    #delete the next two lines
+    #M = None
+    #warped = np.copy(img1) 
     return warped, M
 
 
@@ -148,4 +151,5 @@ ax1.set_title('Original Image', fontsize=50)
 ax2.imshow(top_down)
 ax2.set_title('Undistorted and Warped Image', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+
 ```
