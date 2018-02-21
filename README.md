@@ -38,7 +38,7 @@ if ret == True:
     cv2.drawChessboardCorners(img, (nx, ny), corners, ret)
     plt.imshow(img)
 ```
-
+## Undistort and transform
 Other important functions are `cv2.calibrateCamera()` and `cv2.undistort()` functions to compute the calibration and undistortion
 ```python
 import pickle
