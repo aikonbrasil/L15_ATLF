@@ -157,81 +157,40 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 as we need to pass a single color channel to `cv2.sobel()` it is mandatory to apply a grayscale convertion
 
 ```
-gray = cv2.cvtColor(im, cv2.COLOR_RGB2GRAY)
-```
-
-cv2 function used to apply  derivative in the x dimension
-```
-sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0)
-```
-
-to apply derivative in the y dimension 
-```
-sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
-```
-
-to apply the absolute of the x derivative
-```
-abs_sobelx = np.absolute(sobelx)
-```
-to convert the absolute value image to 8-bit
-```
-scaled_sobel = np.uint8(255*abs_sobelx/np.max(abs_sobelx))
-```
-
-To create a binary threshold to select pixels based on gradient strength:
-```python
-thresh_min = 20
-thresh_max = 100
-sxbinary = np.zeros_like(scaled_sobel)
-sxbinary[(scaled_sobel >= thresh_min) & (scaled_sobel <= thresh_max)] = 1
-plt.imshow(sxbinary, cmap='gray')
-```
-## Magnitue of the Gradient
-here there is an interesting script applying Magnitude of the Gradient code
-´´´python
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import pickle
-import math
 
 
 # Read in an image
 image = mpimg.imread('signs_vehicles_xygrad.png')
 
 # Define a function that applies Sobel x and y, 
-# then computes the magnitude of the gradient
-# and applies a threshold
-def mag_thresh(img, sobel_kernel=3, mag_thresh=(0, 255)):
+# then computes the direction of the gradient
+# and applies a threshold.
+def dir_threshold(img, sobel_kernel=3, thresh=(0, np.pi/2)):
+    
     # Apply the following steps to img
     # 1) Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     # 2) Take the gradient in x and y separately
-    sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
-    sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
-    # 3) Calculate the magnitude 
-    abs_sobelxy = np.sqrt(np.square(sobelx)+np.square(sobely))
-    #print(abs_sobelxy)
-    # 4) Scale to 8-bit (0 - 255) and convert to type = np.uint8
-    scaled_sobel = np.uint8(255*abs_sobelxy/np.max(abs_sobelxy))
-    # 5) Create a binary mask where mag thresholds are met
-    sxbinary = np.zeros_like(scaled_sobel)
-    sxbinary[(scaled_sobel >= mag_thresh[0]) & (scaled_sobel <= mag_thresh[1])] = 1
+    # 3) Take the absolute value of the x and y gradients
+    # 4) Use np.arctan2(abs_sobely, abs_sobelx) to calculate the direction of the gradient 
+    # 5) Create a binary mask where direction thresholds are met
     # 6) Return this mask as your binary_output image
-    #binary_output = np.copy(img) # Remove this line
-    return sxbinary
+    binary_output = np.copy(img) # Remove this line
+    return binary_output
     
 # Run the function
-mag_binary = mag_thresh(image, sobel_kernel=9, mag_thresh=(30, 100))
+dir_binary = dir_threshold(image, sobel_kernel=15, thresh=(0.7, 1.3))
 # Plot the result
 f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
 f.tight_layout()
 ax1.imshow(image)
 ax1.set_title('Original Image', fontsize=50)
-ax2.imshow(mag_binary, cmap='gray')
-ax2.set_title('Thresholded Magnitude', fontsize=50)
+ax2.imshow(dir_binary, cmap='gray')
+ax2.set_title('Thresholded Grad. Dir.', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ´´´
 
