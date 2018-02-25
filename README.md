@@ -242,7 +242,7 @@ ax2.set_title('Thresholded Magnitude', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
 ## Direction of the Gradient
-´´´python
+```python
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -276,7 +276,6 @@ def dir_threshold(img, sobel_kernel=3, thresh=(0, np.pi/2)):
     #binary_output = np.copy(img) # Remove this line
     return sxbinary
     
-    
 # Run the function
 dir_binary = dir_threshold(image, sobel_kernel=15, thresh=(0.7, 1.3))
 # Plot the result
@@ -287,4 +286,4 @@ ax1.set_title('Original Image', fontsize=50)
 ax2.imshow(dir_binary, cmap='gray')
 ax2.set_title('Thresholded Grad. Dir.', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
-´´´
+```
